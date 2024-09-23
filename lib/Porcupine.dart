@@ -24,7 +24,7 @@ class _VoiceCommandState extends State<VoiceCommand> {
   bool _isRinging = false;
 
 
-  final String _keywordAsset = "assets/HELP-ME_en_android_v3_0_0.ppn";
+  final List<String> _keywordAsset = ["assets/HELP-ME_en_android_v3_0_0.ppn","assets/Save-me_en_android_v3_0_0.ppn"];
   final String _accessKey = PICOVOICE_API_KEY;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -40,7 +40,7 @@ class _VoiceCommandState extends State<VoiceCommand> {
     try {
       _porcupineManager = await PorcupineManager.fromKeywordPaths(
         _accessKey,
-        [_keywordAsset],
+        _keywordAsset,
         _wakeWordCallback,
       );
       await _porcupineManager?.start();
@@ -51,8 +51,9 @@ class _VoiceCommandState extends State<VoiceCommand> {
   }
 
   void _wakeWordCallback(int keywordIndex) {
+
     print("Wake word detected: $keywordIndex");
-    if (keywordIndex == 0) {
+    if (keywordIndex == 0 || keywordIndex==1) {
       // Keyword detected
       _sendEmergencySMS();
     }

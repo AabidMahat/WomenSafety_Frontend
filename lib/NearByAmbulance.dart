@@ -78,10 +78,11 @@ class _AmbulanceState extends State<Ambulance> {
 
   Future<void> _getNearbyAmbulances() async {
     final apiKey = GOOGLE_API_KEY; // Make sure to load the API key
-    final radius = 5000;
+    final radius = 50000;
 
     final baseURl = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
-    final url = '$baseURl?location=${_currentPosition!.latitude},${_currentPosition!.longitude}&radius=$radius&type=hospital&key=$apiKey';
+    final url = '$baseURl?location=${_currentPosition!.latitude},${_currentPosition!.longitude}'
+        '&radius=$radius&type=bus_station&key=$apiKey';
 
     final response = await http.get(Uri.parse(url));
 

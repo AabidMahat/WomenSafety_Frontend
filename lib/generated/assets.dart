@@ -10,6 +10,7 @@ class Assets {
   static const String assetsHELPMEEnAndroidV300 = 'assets/HELP-ME_en_android_v3_0_0.ppn';
   static const String assetsPoliceMarker = 'assets/policeMarker.png';
   static const String assetsPoliceman = 'assets/policeman.png';
+  static const String assetsSaveMeEnAndroidV300 = 'assets/Save-me_en_android_v3_0_0.ppn';
   static const String databaseDatabase = 'lib/Database/Database.dart';
   static const String feedBackFeedBackMap = 'lib/FeedBack/FeedBackMap.dart';
   static const String feedBackFeedbackForm = 'lib/FeedBack/FeedbackForm.dart';
@@ -26,7 +27,7 @@ class Assets {
   static const String libPorcupine = 'lib/Porcupine.dart';
   static const String libShake = 'lib/shake.dart';
   static const String libVedioPlayer = 'lib/vedioPlayer.dart';
-  static const String libVideoPreview = 'lib/VideoPreview.dart';
+  static const String libVedioPreview = 'lib/VedioPreview.dart';
   static const String libVoiceCommand = 'lib/VoiceCommand.dart';
   static const String megaProjectAssetsPoliceMarker = 'assets/policeMarker.svg';
 

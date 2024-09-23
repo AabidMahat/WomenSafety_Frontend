@@ -115,24 +115,11 @@ class _PoliceStationState extends State<PoliceStation> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
 
-      if (data['status'] == 'OK' && policeIcon!=null) {
-        setState(() {
-          _marker.addAll(data['results'].map<Marker>((place) {
-            return Marker(
-                markerId: MarkerId(place['place_id']),
-                position: LatLng(
-                  place['geometry']['location']['lat'],
-                  place['geometry']['location']['lng'],
-                ),
-                // icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRose),
-                icon: policeIcon!,
-                infoWindow: InfoWindow(
-                    title: place['name'], snippet: place['vicinity']),
-                onTap: () => _getRouteToMarker(LatLng(
-                    place['geometry']['location']['lat'],
-                    place['geometry']['location']['lng'])));
-          }).toSet());
-        });
+      if (data['status'] == 'OK' && policeIcon != null) {
+        for (var place in data['results']) {
+          // Fetch and display the details including the phone number
+          _getPoliceStationDetails(place);
+        }
       } else {
         Fluttertoast.showToast(msg: "No police stations found nearby.");
       }
@@ -140,6 +127,51 @@ class _PoliceStationState extends State<PoliceStation> {
       Fluttertoast.showToast(msg: "Failed to fetch nearby police stations.");
     }
   }
+
+  Future<void> _getPoliceStationDetails(Map<String, dynamic> place) async {
+    final apiKey = GOOGLE_API_KEY;
+    final placeId = place['place_id'];
+    final url = 'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$apiKey';
+
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      if (data['status'] == 'OK') {
+        final result = data['result'];
+
+        final phoneNumber = result['formatted_phone_number'] ?? 'No phone available';
+
+        // Create a marker with the police station details
+        final marker = Marker(
+          markerId: MarkerId(placeId),
+          position: LatLng(
+            place['geometry']['location']['lat'],
+            place['geometry']['location']['lng'],
+          ),
+          icon: policeIcon!,
+          infoWindow: InfoWindow(
+            title: place['name'],
+            snippet: " ${place['vicinity']}\nPhone: $phoneNumber",
+          ),
+          onTap: () => _getRouteToMarker(LatLng(
+            place['geometry']['location']['lat'],
+            place['geometry']['location']['lng'],
+          )),
+        );
+
+        // Update the markers on the map
+        setState(() {
+          _marker.add(marker);
+        });
+      } else {
+        Fluttertoast.showToast(msg: "Failed to fetch police station details.");
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Failed to fetch police station details.");
+    }
+  }
+
 
   Future<void> _getRouteToMarker(LatLng destination) async {
     final apiKey = GOOGLE_API_KEY;
